@@ -1,0 +1,81 @@
+{
+  "name": "react-native-tc-conversations",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "cp -rv src/assets lib/",
+    "test-locally": "watch 'npm run build && cp -r lib/. ../main-app/node_modules/react-native-tc-conversations/lib/' src"
+  },
+  "peerDependencies": {
+    "react-native": "^0.60.6",
+    "react-native-web": "^0.11.7"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.12.5",
+    "@twilio/conversations": "^1.1.0",
+    "axios": "^0.20.0",
+    "cors": "^2.8.5",
+    "date-fns": "^2.17.0",
+    "expo": "^40.0.1",
+    "expo-camera": "~9.0.0",
+    "expo-image-picker": "~9.1.1",
+    "expo-linking": "^1.0.5",
+    "expo-notifications": "^0.8.2",
+    "expo-permissions": "~9.3.0",
+    "pluralize": "^8.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-native-elements": "^3.2.0",
+    "react-native-gifted-chat": "^0.16.3",
+    "react-native-iphone-x-helper": "^1.3.1",
+    "react-native-safe-area-context": "3.1.4",
+    "react-native-svg": "^12.1.0",
+    "react-native-unimodules": "^0.11.0",
+    "react-native-vector-icons": "^8.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.6",
+    "@expo/webpack-config": "^0.12.16",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/jest-native": "^3.4.2",
+    "@testing-library/react-native": "^7.0.2",
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.14.6",
+    "@types/pluralize": "0.0.29",
+    "@types/react": "~16.9.35",
+    "@types/react-native": "~0.63.2",
+    "babel-eslint": "10.1.0",
+    "babel-jest": "~25.2.6",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "babel-runtime": "^6.26.0",
+    "cypress": "^5.3.0",
+    "eslint": "^7.15.0",
+    "eslint-plugin-babel": "5.3.1",
+    "eslint-plugin-cypress": "2.10.3",
+    "eslint-plugin-graphql": "3.1.1",
+    "eslint-plugin-import": "2.20.0",
+    "eslint-plugin-jest": "23.6.0",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "2.3.0",
+    "eslint-plugin-react-native": "^3.9.1",
+    "eslint-plugin-testing-library": "2.2.1",
+    "jest": "^26.6.3",
+    "jest-expo": "^39.0.0",
+    "prettier": "2.2.0",
+    "react-test-renderer": "~16.13.1",
+    "typescript": "^3.9.7",
+    "watch": "^1.0.2",
+    "wd": "^1.14.0"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "license": "MIT",
+  "private": false
+}

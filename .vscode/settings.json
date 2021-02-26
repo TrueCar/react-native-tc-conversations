@@ -1,0 +1,15 @@
+{
+  "eslint.lintTask.enable": true,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "eslint.lintTask.options": "--ext .js,.ts,.tsx src",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode" // <-- https://github.com/prettier/prettier-vscode/issues/1598#issuecomment-706420105
+}
