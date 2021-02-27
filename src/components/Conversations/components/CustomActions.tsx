@@ -48,7 +48,6 @@ const CustomActions = (
 
   return (
     <View style={styles.wrapper}>
-      {/* TODO: enable when feature ready  */}
       {/*<TouchableOpacity style={styles.container} onPress={onActionsPress}>*/}
       {/*  {renderCameraIcon()}*/}
       {/*</TouchableOpacity>*/}

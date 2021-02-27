@@ -84,6 +84,7 @@ const TwilioConversationsProvider = ({
         // @ts-expect-error
         (m) => !m.attributes.to || m.attributes.to === identity
       );
+
       return formatMessagesForGiftedChat(displayableMessages);
     },
     [identity]
@@ -171,8 +172,9 @@ const TwilioConversationsProvider = ({
   );
 
   const messageAdded = React.useCallback(
-    (message: Message) => {
-      const newMessage = formatMessageForGiftedChat(message);
+    async (message: Message) => {
+      const newMessage = await formatMessageForGiftedChat(message);
+
       renderNewMessage({
         author: message.author,
         conversationId: message.conversation.sid,
@@ -344,18 +346,31 @@ const TwilioConversationsProvider = ({
 
   const onMessageSend = React.useCallback(
     (newMessages = []) => {
-      const mostRecentMessage = newMessages[0];
-      if (mostRecentMessage && selectedConversation) {
+      const newMessage = newMessages[0];
+
+      if (newMessage && selectedConversation) {
         renderNewMessage({
-          author: mostRecentMessage.user.name,
+          author: identity,
           conversationId: selectedConversation.sid,
-          newMessage: { ...mostRecentMessage, pending: true },
+          newMessage: { ...newMessage, user: { _id: identity }, pending: true },
         });
+
+        if (newMessage.hasOwnProperty("text")) {
+          selectedConversation.sendMessage(newMessage.text);
+        } else if (newMessage.hasOwnProperty("image")) {
+          const formData = new FormData();
+          formData.append("file", {
+            uri: newMessage.image,
+            type: "image/jpeg",
+            name: "image.jpg",
+          });
+          selectedConversation.sendMessage(formData);
+        }
+
         selectedConversation.setAllMessagesRead();
-        selectedConversation.sendMessage(mostRecentMessage.text);
       }
     },
-    [selectedConversation, renderNewMessage]
+    [identity, selectedConversation, renderNewMessage]
   );
 
   const returnValues = {

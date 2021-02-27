@@ -185,12 +185,24 @@ const Conversation = ({
   };
 
   const renderCustomComposer = (props: ComposerProps) => {
+    let textInputProps = { ...props.textInputProps };
     const textInputStyle = {
       ...inputText,
       marginBottom: 3,
     };
 
     if (webMode) {
+      textInputProps = {
+        ...props.textInputProps,
+        blurOnSubmit: true,
+        onSubmitEditing: () => {
+          //@ts-expect-error
+          if (props.text && props.onSend) {
+            //@ts-expect-error
+            props.onSend({ text: props.text.trim() }, true);
+          }
+        },
+      };
       textInputStyle.fontFamily = tcFontWeb;
     }
 
@@ -199,6 +211,7 @@ const Conversation = ({
         {...props}
         placeholder="Type a message"
         textInputStyle={textInputStyle}
+        textInputProps={textInputProps}
       />
     );
   };

@@ -158,7 +158,8 @@ const Item = ({
   const hasNotBeenInteractedWith =
     lastReadMessageIndex === null || unreadMessagesCount > 0;
   const hasNewInteraction =
-    (messages.length === 0 && !lastReadMessageIndex) || unreadMessagesCount > 0;
+    (messages.length === 0 && lastReadMessageIndex === null) ||
+    unreadMessagesCount > 0;
 
   const hasOptedOut = participantOptedOut || item?.attributes.hasOptedOut;
 
