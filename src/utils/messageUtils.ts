@@ -12,12 +12,17 @@ export const getProspectIdFromConversation = (
 };
 
 export const formatMessageForGiftedChat: (
-  message: Message
-) => Promise<IMessage> = async (message: Message) => {
-  const name = message.author?.includes("consumer")
+  message: Message,
+  identity: string
+) => Promise<IMessage> = async (message: Message, identity: string) => {
+  const isConsumerMessage = message.author?.includes("consumer");
+  const name = isConsumerMessage
     ? // @ts-expect-error
       message.conversation?.title
     : "";
+
+  const id = isConsumerMessage ? message.author : identity;
+
   const formattedMessage: IMessage = {
     _id: message.sid,
     text: message.body,
@@ -25,7 +30,7 @@ export const formatMessageForGiftedChat: (
 
     // system: m.author === "system",
     user: {
-      _id: message.author,
+      _id: id,
       name,
     },
   };
@@ -41,5 +46,7 @@ export const formatMessageForGiftedChat: (
   return formattedMessage;
 };
 
-export const formatMessagesForGiftedChat = async (messages: Message[]) =>
-  Promise.all(messages.map(formatMessageForGiftedChat));
+export const formatMessagesForGiftedChat = async (
+  messages: Message[],
+  identity: string
+) => Promise.all(messages.map((m) => formatMessageForGiftedChat(m, identity)));
