@@ -1,12 +1,12 @@
 import { Alert } from "react-native";
-import * as Permissions from "expo-permissions";
+import { askAsync, CAMERA, CAMERA_ROLL, PermissionType } from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import * as Linking from "expo-linking";
 
 export default async function getPermissionAsync(
-  permission: Permissions.PermissionType
+  permission: PermissionType
 ) {
-  const { status } = await Permissions.askAsync(permission);
+  const { status } = await askAsync(permission);
   if (status !== "granted") {
     const permissionName = permission.toLowerCase().replace("_", " ");
     Alert.alert(
@@ -31,7 +31,7 @@ export default async function getPermissionAsync(
 export const pickImageAsync = async (
   onSend: (values: Array<{ image: string }>) => void
 ) => {
-  if (await getPermissionAsync(Permissions.CAMERA_ROLL)) {
+  if (await getPermissionAsync(CAMERA_ROLL)) {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
@@ -48,7 +48,7 @@ export const pickImageAsync = async (
 export const takePictureAsync = async (
   onSend: (values: Array<{ image: string }>) => void
 ) => {
-  if (await getPermissionAsync(Permissions.CAMERA)) {
+  if (await getPermissionAsync(CAMERA)) {
     const result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [4, 3],

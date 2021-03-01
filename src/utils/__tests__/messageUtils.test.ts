@@ -8,6 +8,7 @@ describe("messageUtils", () => {
     });
 
     it("returns prospect_id from conversation's attributes", () => {
+      //@ts-expect-error
       const prospectId = getProspectIdFromConversation({
         attributes: { prospect_id: "ZZZTTT" },
       });

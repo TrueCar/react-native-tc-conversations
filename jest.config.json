@@ -1,6 +1,0 @@
-{
-  "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "html", "json"],
-  "preset": "jest-expo",
-  "setupFilesAfterEnv": ["@testing-library/jest-native/extend-expect"],
-  "testRegex": "\\/__tests__\\/.*\\.(test|spec)\\.(js|ts|tsx)$"
-}
