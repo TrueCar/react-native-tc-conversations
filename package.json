@@ -28,7 +28,7 @@
     "pluralize": "^8.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-native-elements": "^3.2.0",
+    "react-native-elements": "git+https://github.com/lewong/react-native-elements.git",
     "react-native-gifted-chat": "^0.16.3",
     "react-native-iphone-x-helper": "^1.3.1",
     "react-native-safe-area-context": "3.1.4",
