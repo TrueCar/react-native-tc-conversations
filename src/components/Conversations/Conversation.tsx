@@ -252,7 +252,11 @@ const Conversation = ({
       <GiftedChat
         text={conversationInputText}
         onInputTextChanged={setConversationInputText}
-        messages={selectedConversation?.messages || []}
+        messages={
+          Platform.OS !== "web"
+            ? selectedConversation?.messages.reverse()
+            : selectedConversation?.messages
+        }
         onSend={onMessageSend}
         user={{ _id: identity, name: identity }}
         scrollToBottom

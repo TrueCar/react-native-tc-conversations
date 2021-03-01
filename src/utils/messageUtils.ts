@@ -42,4 +42,4 @@ export const formatMessageForGiftedChat: (
 };
 
 export const formatMessagesForGiftedChat = async (messages: Message[]) =>
-  Promise.all(messages.reverse().map(formatMessageForGiftedChat));
+  Promise.all(messages.map(formatMessageForGiftedChat));
