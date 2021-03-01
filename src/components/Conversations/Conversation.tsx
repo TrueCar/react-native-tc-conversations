@@ -252,7 +252,11 @@ const Conversation = ({
       <GiftedChat
         text={conversationInputText}
         onInputTextChanged={setConversationInputText}
-        messages={selectedConversation?.messages || []}
+        messages={
+          Platform.OS !== "web"
+            ? selectedConversation?.messages.reverse()
+            : selectedConversation?.messages
+        }
         onSend={onMessageSend}
         user={{ _id: identity, name: identity }}
         scrollToBottom
@@ -270,7 +274,7 @@ const Conversation = ({
         //@ts-expect-error
         renderTicks={() => null}
         quickReplyStyle={{ borderRadius: 2 }}
-        inverted
+        inverted={Platform.OS !== "web"}
         bottomOffset={bottomOffset}
         timeTextStyle={{
           left: { color: "red" },
