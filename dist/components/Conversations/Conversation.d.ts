@@ -19,5 +19,5 @@ export declare type ProspectInfo = {
     id: string;
     name: string;
 };
-declare const Conversation: ({ bottomOffset, manualOfferBtnComponent, onManualOfferPress, navBarRightComponent, onNavBarPressLeft, onNavBarPressRight, onNavBarPressTitle, participantOptedOut, renderCustomAvatar, predefinedChatInput, onUserMessagesView, onCameraPressed, renderUsernameOnMessage, webMode, }: ConversationProps) => JSX.Element;
+declare const Conversation: ({ bottomOffset, manualOfferBtnComponent, onManualOfferPress, navBarRightComponent, onNavBarPressLeft, participantOptedOut, renderCustomAvatar, predefinedChatInput, onUserMessagesView, onCameraPressed, renderUsernameOnMessage, webMode, }: ConversationProps) => JSX.Element;
 export default Conversation;

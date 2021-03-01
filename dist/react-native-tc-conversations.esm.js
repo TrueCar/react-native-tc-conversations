@@ -1,7 +1,6 @@
 import React__default, { createElement, useContext } from 'react';
 import { Text as Text$1, StyleSheet, View, TouchableOpacity, FlatList, ActivityIndicator, Image, BackHandler, Platform } from 'react-native';
 import { isIphoneX } from 'react-native-iphone-x-helper';
-import { ListItem, Header } from 'react-native-elements';
 import { format } from 'date-fns';
 import Svg, { G, Path, Circle } from 'react-native-svg';
 import axios from 'axios';
@@ -13,7 +12,6 @@ import PropTypes from 'prop-types';
 import 'expo-permissions';
 import 'expo-image-picker';
 import 'expo-linking';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
@@ -194,12 +192,6 @@ var img$4 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtA
 var img$5 = "data:image/png;base64,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";
 
 //@ts-expect-error
-// const avatar1 = require("./assets/avatar-1.png");
-// const avatar2 = require("./assets/avatar-2.png");
-// const avatar3 = require("./assets/avatar-3.png");
-// const avatar4 = require("./assets/avatar-4.png");
-// const avatar5 = require("./assets/avatar-5.png");
-
 var avatars = {
   "0": img,
   "1": img$1,
@@ -1891,7 +1883,7 @@ var Item = function Item(_ref3) {
     accessible: false,
     onPress: onPress,
     testID: "conversationList" + index
-  }, React__default.createElement(ListItem, {
+  }, React__default.createElement(View, {
     containerStyle: styles$2.itemContainer
   }, React__default.createElement(Image, {
     source: getAvatarSource(index),
@@ -2106,54 +2098,66 @@ var IconToBottom = function IconToBottom(_ref) {
   })));
 };
 
-var NavBar = function NavBar(_ref) {
-  var onPressLeft = _ref.onPressLeft,
-      title = _ref.title,
-      onPressTitle = _ref.onPressTitle,
-      onPressRight = _ref.onPressRight;
-  return React__default.createElement(Header, {
-    backgroundColor: "#f5f5f5",
-    leftComponent: React__default.createElement(TouchableOpacity, {
-      onPress: onPressLeft,
-      hitSlop: {
-        top: 10,
-        bottom: 10,
-        left: 10
-      },
-      style: styles$4.leftComponent
-    }, React__default.createElement(AntDesign, {
-      name: "left",
-      size: 24,
-      color: "black"
-    })),
-    centerComponent: React__default.createElement(Text, {
-      bold: true,
-      size: 18,
-      onPress: onPressTitle
-    }, title),
-    rightComponent: React__default.createElement(AntDesign, {
-      name: "ellipsis1",
-      size: 24,
-      color: "black",
-      onPress: onPressRight,
-      testID: "prospectProfileBtn"
-    }),
-    containerStyle: {
-      height: 100
-    }
-  });
-};
-
-var styles$4 = /*#__PURE__*/StyleSheet.create({
-  leftComponent: {
-    flexDirection: "row",
-    alignItems: "center"
-  },
-  avatarImg: {
-    height: 30,
-    width: 30,
-    marginLeft: 10
-  }
+// import React from "react";
+// import { StyleSheet, TouchableOpacity } from "react-native";
+// import { Header } from "react-native-elements";
+// import AntDesign from "react-native-vector-icons/AntDesign";
+// import Text from "../../Text";
+// type NavBarProps = {
+//   onPressLeft: () => void;
+//   title: string;
+//   onPressTitle: () => void;
+//   onPressRight: () => void;
+// };
+// const NavBar = ({
+//   onPressLeft,
+//   title,
+//   onPressTitle,
+//   onPressRight,
+// }: NavBarProps) => (
+//   <Header
+//     backgroundColor="#f5f5f5"
+//     leftComponent={
+//       <TouchableOpacity
+//         onPress={onPressLeft}
+//         hitSlop={{ top: 10, bottom: 10, left: 10 }}
+//         style={styles.leftComponent}
+//       >
+//         <AntDesign name="left" size={24} color="black" />
+//       </TouchableOpacity>
+//     }
+//     centerComponent={
+//       <Text bold size={18} onPress={onPressTitle}>
+//         {title}
+//       </Text>
+//     }
+//     rightComponent={
+//       <AntDesign
+//         name="ellipsis1"
+//         size={24}
+//         color="black"
+//         onPress={onPressRight}
+//         testID="prospectProfileBtn"
+//       />
+//     }
+//     containerStyle={{
+//       height: 100,
+//     }}
+//   />
+// );
+// const styles = StyleSheet.create({
+//   leftComponent: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//   },
+//   avatarImg: {
+//     height: 30,
+//     width: 30,
+//     marginLeft: 10,
+//   },
+// });
+var NavBar = (function () {
+  return null;
 });
 
 var Conversation = function Conversation(_ref) {
@@ -2166,8 +2170,6 @@ var Conversation = function Conversation(_ref) {
   } : _ref$onManualOfferPre,
       navBarRightComponent = _ref.navBarRightComponent,
       onNavBarPressLeft = _ref.onNavBarPressLeft,
-      onNavBarPressRight = _ref.onNavBarPressRight,
-      onNavBarPressTitle = _ref.onNavBarPressTitle,
       participantOptedOut = _ref.participantOptedOut,
       renderCustomAvatar = _ref.renderCustomAvatar,
       _ref$predefinedChatIn = _ref.predefinedChatInput,
@@ -2249,7 +2251,7 @@ var Conversation = function Conversation(_ref) {
 
   var renderBubble = function renderBubble(props) {
     return React__default.createElement(View, {
-      style: styles$5.chatBubble,
+      style: styles$4.chatBubble,
       testID: "message"
     }, React__default.createElement(Bubble, Object.assign({}, props)));
   };
@@ -2315,7 +2317,7 @@ var Conversation = function Conversation(_ref) {
 
     if (webMode) {
       SendButton = React__default.createElement(Text, {
-        style: styles$5.sendButtonWeb
+        style: styles$4.sendButtonWeb
       }, "Send");
     } else if (Platform.OS === "ios") {
       SendButton = React__default.createElement(Feather, {
@@ -2326,46 +2328,26 @@ var Conversation = function Conversation(_ref) {
     }
 
     return React__default.createElement(Send, Object.assign({}, props, {
-      containerStyle: styles$5.sendContainer
+      containerStyle: styles$4.sendContainer
     }), SendButton);
   };
 
   return React__default.createElement(View, {
-    style: styles$5.container,
+    style: styles$4.container,
     accessibilityLabel: "main",
     testID: "main"
-  }, !webMode && React__default.createElement(NavBar, {
-    title: (selectedConversation == null ? void 0 : selectedConversation.title) || "",
-    onPressLeft: function () {
-      var _onPressLeft = _asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee() {
-        return runtime_1.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                onNavBarPressLeft == null ? void 0 : onNavBarPressLeft();
-                handleBackPress();
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      function onPressLeft() {
-        return _onPressLeft.apply(this, arguments);
-      }
-
-      return onPressLeft;
-    }(),
-    onPressRight: function onPressRight() {
-      onNavBarPressRight == null ? void 0 : onNavBarPressRight();
-    },
-    onPressTitle: function onPressTitle() {
-      onNavBarPressTitle == null ? void 0 : onNavBarPressTitle();
-    }
-  }), React__default.createElement(GiftedChat, {
+  }, !webMode && React__default.createElement(NavBar // title={selectedConversation?.title || ""}
+  // onPressLeft={async () => {
+  //   onNavBarPressLeft?.();
+  //   handleBackPress();
+  // }}
+  // onPressRight={() => {
+  //   onNavBarPressRight?.();
+  // }}
+  // onPressTitle={() => {
+  //   onNavBarPressTitle?.();
+  // }}
+  , null), React__default.createElement(GiftedChat, {
     text: conversationInputText,
     onInputTextChanged: setConversationInputText,
     messages: Platform.OS !== "web" ? selectedConversation == null ? void 0 : selectedConversation.messages.reverse() : selectedConversation == null ? void 0 : selectedConversation.messages,
@@ -2418,7 +2400,7 @@ var Conversation = function Conversation(_ref) {
     }
   }), hasOptedOut && React__default.createElement(View, {
     testID: "optedOut",
-    style: styles$5.optedOut
+    style: styles$4.optedOut
   }, React__default.createElement(Text, {
     bold: true
   }, selectedConversation == null ? void 0 : selectedConversation.title, " has opted out of text communication."), React__default.createElement(Text, null, "If you still want to contact your customer you can reach them by email.")), navBarRightComponent == null ? void 0 : navBarRightComponent({
@@ -2430,7 +2412,7 @@ var Conversation = function Conversation(_ref) {
   }));
 };
 
-var styles$5 = /*#__PURE__*/StyleSheet.create({
+var styles$4 = /*#__PURE__*/StyleSheet.create({
   loading: {
     flex: 1
   },

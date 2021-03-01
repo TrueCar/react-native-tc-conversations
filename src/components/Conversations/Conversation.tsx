@@ -61,8 +61,8 @@ const Conversation = ({
   onManualOfferPress = () => null,
   navBarRightComponent,
   onNavBarPressLeft,
-  onNavBarPressRight,
-  onNavBarPressTitle,
+  // onNavBarPressRight,
+  // onNavBarPressTitle,
   participantOptedOut,
   renderCustomAvatar,
   predefinedChatInput = "",
@@ -235,17 +235,17 @@ const Conversation = ({
     <View style={styles.container} accessibilityLabel="main" testID="main">
       {!webMode && (
         <NavBar
-          title={selectedConversation?.title || ""}
-          onPressLeft={async () => {
-            onNavBarPressLeft?.();
-            handleBackPress();
-          }}
-          onPressRight={() => {
-            onNavBarPressRight?.();
-          }}
-          onPressTitle={() => {
-            onNavBarPressTitle?.();
-          }}
+        // title={selectedConversation?.title || ""}
+        // onPressLeft={async () => {
+        //   onNavBarPressLeft?.();
+        //   handleBackPress();
+        // }}
+        // onPressRight={() => {
+        //   onNavBarPressRight?.();
+        // }}
+        // onPressTitle={() => {
+        //   onNavBarPressTitle?.();
+        // }}
         />
       )}
 

@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import Heading from "../Heading";
 import Text from "../Text";
-import { ListItem, SearchBar } from "react-native-elements";
 import {
   headerSpacing,
   tcDark,
@@ -169,7 +168,7 @@ const Item = ({
       onPress={onPress}
       testID={`conversationList${index}`}
     >
-      <ListItem containerStyle={styles.itemContainer}>
+      <View containerStyle={styles.itemContainer}>
         <Image
           source={getAvatarSource(index)}
           style={[styles.avatarImg, hasOptedOut && styles.optedOutImage]}
@@ -209,7 +208,7 @@ const Item = ({
             )}
           </View>
         </View>
-      </ListItem>
+      </View>
     </TouchableOpacity>
   );
 };
