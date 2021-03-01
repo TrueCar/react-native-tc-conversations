@@ -85,7 +85,7 @@ const TwilioConversationsProvider = ({
         (m) => !m.attributes.to || m.attributes.to === identity
       );
 
-      return formatMessagesForGiftedChat(displayableMessages);
+      return formatMessagesForGiftedChat(displayableMessages, identity);
     },
     [identity]
   );
@@ -173,7 +173,7 @@ const TwilioConversationsProvider = ({
 
   const messageAdded = React.useCallback(
     async (message: Message) => {
-      const newMessage = await formatMessageForGiftedChat(message);
+      const newMessage = await formatMessageForGiftedChat(message, identity);
 
       renderNewMessage({
         author: message.author,
@@ -181,7 +181,7 @@ const TwilioConversationsProvider = ({
         newMessage,
       });
     },
-    [renderNewMessage]
+    [renderNewMessage, identity]
   );
 
   React.useEffect(() => {
@@ -290,37 +290,21 @@ const TwilioConversationsProvider = ({
     [prospectId, loadUniqueConversation, loadMultipleConversations]
   );
 
-  const init = React.useCallback(async () => {
-    console.log("==============> fetching token");
+  const initializeClient = React.useCallback(async () => {
     const tokenResp = await getTokenData();
-    console.log("==============> finished fetching token", tokenResp.data);
     const identity = tokenResp.data.identity;
     const token = tokenResp.data.token;
     setIdentity(identity);
-    console.log("==============> initializing client");
     const twilioClient = await ConversationsClient.create(token);
-    console.log("==============> client initialized");
-    twilioClient.on("conversationAdded", loadConversation);
-    twilioClient.on("messageAdded", messageAdded);
-    twilioClient.on("tokenAboutToExpire", handleExpiredToken);
-    twilioClient.on("tokenExpired", handleExpiredToken);
     setClient(twilioClient);
-    loadConversations(twilioClient);
-  }, [
-    getTokenData,
-    handleExpiredToken,
-    loadConversation,
-    loadConversations,
-    messageAdded,
-  ]);
+  }, [getTokenData]);
 
   React.useEffect(() => {
     if (tokenEndpoint) {
       if (!client && !identity) {
-        init();
+        initializeClient();
       } else if (tokenEndpoint !== currentTokenEndpoint) {
         // re-initialize when the dealer changes
-        client?.removeAllListeners();
         client?.off("messageAdded", messageAdded);
         client?.off("conversationAdded", loadConversation);
         client?.off("tokenAboutToExpire", handleExpiredToken);
@@ -330,19 +314,48 @@ const TwilioConversationsProvider = ({
         setAvailableConversations([]);
         setCurrentTokenEndpoint(tokenEndpoint);
         setClient(null);
-        init();
+        initializeClient();
       }
     }
   }, [
     tokenEndpoint,
     client,
     identity,
-    init,
+    initializeClient,
     currentTokenEndpoint,
     messageAdded,
     loadConversation,
     handleExpiredToken,
   ]);
+
+  React.useEffect(() => {
+    if (client && identity) {
+      // Event handlers are cached with the state at the time they are added
+      // so they need to be refresh when one of the state dependency changes,
+      // ie. in this particular case, identity
+      client.on("conversationAdded", loadConversation);
+      client.on("messageAdded", messageAdded);
+      client.on("tokenAboutToExpire", handleExpiredToken);
+      client.on("tokenExpired", handleExpiredToken);
+      return () => {
+        // Note that this function will fire if this useEffect gets triggered, despite
+        // whether it passes the if-statement check.
+        // In this case, we want to remove the listeners when identity or client changes.
+        client?.off("messageAdded", messageAdded);
+        client?.off("conversationAdded", loadConversation);
+        client?.off("tokenAboutToExpire", handleExpiredToken);
+        client?.off("tokenExpired", handleExpiredToken);
+      };
+    }
+    return undefined;
+  }, [client, identity, loadConversation, messageAdded, handleExpiredToken]);
+
+  React.useEffect(() => {
+    if (client && !conversationsLoaded) {
+      // loadConversations will only fire once per client init, controlled by conversationsLoaded flag
+      loadConversations(client);
+    }
+  }, [client, conversationsLoaded, loadConversations]);
 
   const onMessageSend = React.useCallback(
     (newMessages = []) => {
