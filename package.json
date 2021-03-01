@@ -7,7 +7,7 @@
     "test": "jest",
     "build": "tsc && npm run copy-assets",
     "copy-assets": "cp -rv src/assets lib/",
-    "test-locally": "watch 'npm run build && cp -r lib/. ../abp-frontend/node_modules/react-native-tc-conversations/lib/' src"
+    "test-locally": "watch 'npm run build && cp -r lib/. ../main-app/node_modules/react-native-tc-conversations/lib/' src"
   },
   "peerDependencies": {
     "react-native": "^0.60.6",
