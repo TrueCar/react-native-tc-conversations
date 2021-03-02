@@ -1,6 +1,5 @@
-declare module "react-native-tc-conversations" {
-  import React from "react";
-  export type ConversationProps = {
+import React from "react";
+export declare type ConversationWithoutProviderProps = {
     bottomOffset?: number;
     manualOfferBtnComponent?: (prospect: ProspectInfo) => React.ReactNode;
     navBarRightComponent?: (prospect: ProspectInfo) => React.ReactNode;
@@ -14,28 +13,15 @@ declare module "react-native-tc-conversations" {
     onCameraPressed?: () => void;
     predefinedChatInput?: string;
     renderUsernameOnMessage?: boolean;
+    webMode?: boolean;
+};
+interface ConversationProps extends ConversationWithoutProviderProps {
     tokenEndpoint: string;
     prospectId: string;
-    webMode?: boolean;
-  };
-  export type ProspectInfo = {
+}
+export declare type ProspectInfo = {
     id: string;
     name: string;
-  };
-  export const Conversation: ({
-    bottomOffset,
-    manualOfferBtnComponent,
-    onManualOfferPress,
-    navBarRightComponent,
-    onNavBarPressLeft,
-    onNavBarPressRight,
-    onNavBarPressTitle,
-    participantOptedOut,
-    renderCustomAvatar,
-    predefinedChatInput,
-    onUserMessagesView,
-    onCameraPressed,
-    renderUsernameOnMessage,
-    webMode,
-  }: ConversationProps) => JSX.Element;
-}
+};
+declare const Conversation: ({ tokenEndpoint, prospectId, ...rest }: ConversationProps) => JSX.Element;
+export default Conversation;

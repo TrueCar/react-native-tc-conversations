@@ -8,8 +8,8 @@ import { Message } from "@twilio/conversations/lib/message";
 import {
   formatMessageForGiftedChat,
   formatMessagesForGiftedChat,
-} from "../../../utils/messageUtils";
-import { IConversation } from "../types";
+} from "../utils/messageUtils";
+import { IConversation } from "../utils/types";
 import { createRequiredContext } from "./requiredContext";
 
 export type TwilioConversationsContextType = {

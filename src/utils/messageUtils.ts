@@ -1,4 +1,4 @@
-import { IConversation } from "../components/Conversations/types";
+import { IConversation } from "./types";
 import { Message } from "@twilio/conversations/lib/message";
 import { IMessage } from "react-native-gifted-chat";
 
