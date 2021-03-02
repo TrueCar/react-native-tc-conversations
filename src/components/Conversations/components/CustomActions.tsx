@@ -3,8 +3,8 @@
 import PropTypes from "prop-types";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { pickImageAsync, takePictureAsync } from "./mediaUtils";
-import IconCamera from "./icons/IconCamera";
+// import { pickImageAsync, takePictureAsync } from "./mediaUtils";
+// import IconCamera from "./icons/IconCamera";
 import IconInventory from "./icons/IconInventory";
 
 type CustomActionsProps = {
@@ -12,55 +12,57 @@ type CustomActionsProps = {
   onSend: () => void;
   onCameraPressed: () => void;
 };
-const CustomActions = (
+const CustomActions = ({
+  onManualOfferPress = () => null,
+}: // onSend = () => null,
+// onCameraPressed = () => null,
+CustomActionsProps) =>
+  // context: any
   {
-    onManualOfferPress = () => null,
-    onSend = () => null,
-    onCameraPressed = () => null,
-  }: CustomActionsProps,
-  context: any
-) => {
-  const onActionsPress = () => {
-    onCameraPressed();
-    const options = ["Choose From Library", "Take Picture", "Cancel"];
-    const cancelButtonIndex = options.length - 1;
-    context.actionSheet().showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex,
-      },
-      async (buttonIndex: number) => {
-        switch (buttonIndex) {
-          case 0:
-            pickImageAsync(onSend);
-            return;
-          case 1:
-            takePictureAsync(onSend);
-            return;
-          default:
-        }
-      }
+    // const onActionsPress = () => {
+    //   onCameraPressed();
+    //   const options = ["Choose From Library", "Take Picture", "Cancel"];
+    //   const cancelButtonIndex = options.length - 1;
+    //   context.actionSheet().showActionSheetWithOptions(
+    //     {
+    //       options,
+    //       cancelButtonIndex,
+    //     },
+    //     async (buttonIndex: number) => {
+    //       switch (buttonIndex) {
+    //         case 0:
+    //           pickImageAsync(onSend);
+    //           return;
+    //         case 1:
+    //           takePictureAsync(onSend);
+    //           return;
+    //         default:
+    //       }
+    //     }
+    //   );
+    // };
+
+    // const renderCameraIcon = React.useCallback(() => <IconCamera />, []);
+    const renderManualOfferIcon = React.useCallback(
+      () => <IconInventory />,
+      []
+    );
+
+    return (
+      <View style={styles.wrapper}>
+        {/*<TouchableOpacity style={styles.container} onPress={onActionsPress}>*/}
+        {/*  {renderCameraIcon()}*/}
+        {/*</TouchableOpacity>*/}
+        <TouchableOpacity
+          style={styles.container}
+          onPress={onManualOfferPress}
+          testID="manualOfferIcon"
+        >
+          {renderManualOfferIcon()}
+        </TouchableOpacity>
+      </View>
     );
   };
-
-  const renderCameraIcon = React.useCallback(() => <IconCamera />, []);
-  const renderManualOfferIcon = React.useCallback(() => <IconInventory />, []);
-
-  return (
-    <View style={styles.wrapper}>
-      {/*<TouchableOpacity style={styles.container} onPress={onActionsPress}>*/}
-      {/*  {renderCameraIcon()}*/}
-      {/*</TouchableOpacity>*/}
-      <TouchableOpacity
-        style={styles.container}
-        onPress={onManualOfferPress}
-        testID="manualOfferIcon"
-      >
-        {renderManualOfferIcon()}
-      </TouchableOpacity>
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
   container: {

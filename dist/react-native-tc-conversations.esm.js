@@ -2,16 +2,13 @@ import React__default, { createElement, useContext } from 'react';
 import { Text as Text$1, StyleSheet, View, TouchableOpacity, FlatList, ActivityIndicator, Image, BackHandler, Platform } from 'react-native';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import { format } from 'date-fns';
-import Svg, { G, Path, Circle } from 'react-native-svg';
+import Svg, { G, Path } from 'react-native-svg';
 import axios from 'axios';
 import { Client } from '@twilio/conversations';
 import { GiftedChat, Bubble, SystemMessage, InputToolbar, Composer, Send } from 'react-native-gifted-chat';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
-import 'expo-permissions';
-import 'expo-image-picker';
-import 'expo-linking';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
@@ -1993,28 +1990,6 @@ var styles$2 = /*#__PURE__*/StyleSheet.create({
   }
 });
 
-var IconCamera = function IconCamera(_ref) {
-  var _ref$width = _ref.width,
-      width = _ref$width === void 0 ? "24" : _ref$width,
-      _ref$height = _ref.height,
-      height = _ref$height === void 0 ? "24" : _ref$height;
-  return React__default.createElement(Svg, {
-    viewBox: "0 0 24 24",
-    width: width,
-    height: height
-  }, React__default.createElement(G, {
-    strokeWidth: 2,
-    stroke: "black",
-    fill: "none"
-  }, React__default.createElement(Circle, {
-    cx: 12,
-    cy: 13,
-    r: 3.5
-  }), React__default.createElement(Path, {
-    d: "M20.5 6.5h-2a1.64 1.64 0 01-1.45-.89 2 2 0 00-1.79-1.11H8.74A2 2 0 007 5.61a1.64 1.64 0 01-1.5.89h-2a2 2 0 00-2 2v10a2 2 0 002 2h17a2 2 0 002-2v-10a2 2 0 00-2-2z"
-  })));
-};
-
 var IconInventory = function IconInventory(_ref) {
   var _ref$width = _ref.width,
       width = _ref$width === void 0 ? "24" : _ref$width,
@@ -2035,15 +2010,36 @@ var IconInventory = function IconInventory(_ref) {
   })));
 };
 
-var CustomActions = function CustomActions(_ref, context) {
+// TODO: added this to ignore noUnusedLocals
+
+var CustomActions = function CustomActions(_ref) {
   var _ref$onManualOfferPre = _ref.onManualOfferPress,
       onManualOfferPress = _ref$onManualOfferPre === void 0 ? function () {
     return null;
   } : _ref$onManualOfferPre;
-
-  var renderCameraIcon = React__default.useCallback(function () {
-    return React__default.createElement(IconCamera, null);
-  }, []);
+  // const onActionsPress = () => {
+  //   onCameraPressed();
+  //   const options = ["Choose From Library", "Take Picture", "Cancel"];
+  //   const cancelButtonIndex = options.length - 1;
+  //   context.actionSheet().showActionSheetWithOptions(
+  //     {
+  //       options,
+  //       cancelButtonIndex,
+  //     },
+  //     async (buttonIndex: number) => {
+  //       switch (buttonIndex) {
+  //         case 0:
+  //           pickImageAsync(onSend);
+  //           return;
+  //         case 1:
+  //           takePictureAsync(onSend);
+  //           return;
+  //         default:
+  //       }
+  //     }
+  //   );
+  // };
+  // const renderCameraIcon = React.useCallback(() => <IconCamera />, []);
   var renderManualOfferIcon = React__default.useCallback(function () {
     return React__default.createElement(IconInventory, null);
   }, []);

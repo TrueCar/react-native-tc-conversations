@@ -5,7 +5,7 @@ declare type CustomActionsProps = {
     onCameraPressed: () => void;
 };
 declare const CustomActions: {
-    ({ onManualOfferPress, onSend, onCameraPressed, }: CustomActionsProps, context: any): JSX.Element;
+    ({ onManualOfferPress, }: CustomActionsProps): JSX.Element;
     contextTypes: {
         actionSheet: PropTypes.Requireable<(...args: any[]) => any>;
     };
