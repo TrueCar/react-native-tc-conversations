@@ -1114,7 +1114,7 @@ var createRequiredContext = function createRequiredContext(name) {
   return [Context.Provider, hook];
 };
 
-var _createRequiredContex = /*#__PURE__*/createRequiredContext('TwilioConversations'),
+var _createRequiredContex = /*#__PURE__*/createRequiredContext("TwilioConversations"),
     Provider = _createRequiredContex[0],
     useTwilioConversations = _createRequiredContex[1];
 
@@ -1151,7 +1151,7 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
       client = _React$useState7[0],
       setClient = _React$useState7[1];
 
-  var _React$useState8 = React__default.useState(''),
+  var _React$useState8 = React__default.useState(""),
       identity = _React$useState8[0],
       setIdentity = _React$useState8[1];
 
@@ -1328,7 +1328,7 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
       if (lastMessage != null && lastMessage.pending) {
         messages[0] = newMessage;
       } else {
-        messages = [newMessage].concat(conversation.messages);
+        messages = [].concat(conversation.messages, [newMessage]);
       }
 
       conversation.mostRecentMessage = messages[0].text;
@@ -1338,7 +1338,7 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
         conversation.lastMessage.dateCreated = new Date(newMessage.createdAt);
       }
 
-      if (!author.includes('dealership')) {
+      if (!author.includes("dealership")) {
         conversation.unreadMessagesCount = conversation.unreadMessagesCount + 1;
       } else {
         conversation.unreadMessagesCount = 0;
@@ -1658,10 +1658,10 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
         initializeClient();
       } else if (tokenEndpoint !== currentTokenEndpoint) {
         // re-initialize when the dealer changes
-        client == null ? void 0 : client.off('messageAdded', messageAdded);
-        client == null ? void 0 : client.off('conversationAdded', loadConversation);
-        client == null ? void 0 : client.off('tokenAboutToExpire', handleExpiredToken);
-        client == null ? void 0 : client.off('tokenExpired', handleExpiredToken);
+        client == null ? void 0 : client.off("messageAdded", messageAdded);
+        client == null ? void 0 : client.off("conversationAdded", loadConversation);
+        client == null ? void 0 : client.off("tokenAboutToExpire", handleExpiredToken);
+        client == null ? void 0 : client.off("tokenExpired", handleExpiredToken);
         setConversationsLoaded(false);
         setConversations(new Map());
         setAvailableConversations([]);
@@ -1676,18 +1676,18 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
       // Event handlers are cached with the state at the time they are added
       // so they need to be refresh when one of the state dependency changes,
       // ie. in this particular case, identity
-      client.on('conversationAdded', loadConversation);
-      client.on('messageAdded', messageAdded);
-      client.on('tokenAboutToExpire', handleExpiredToken);
-      client.on('tokenExpired', handleExpiredToken);
+      client.on("conversationAdded", loadConversation);
+      client.on("messageAdded", messageAdded);
+      client.on("tokenAboutToExpire", handleExpiredToken);
+      client.on("tokenExpired", handleExpiredToken);
       return function () {
         // Note that this function will fire if this useEffect gets triggered, despite
         // whether it passes the if-statement check.
         // In this case, we want to remove the listeners when identity or client changes.
-        client == null ? void 0 : client.off('messageAdded', messageAdded);
-        client == null ? void 0 : client.off('conversationAdded', loadConversation);
-        client == null ? void 0 : client.off('tokenAboutToExpire', handleExpiredToken);
-        client == null ? void 0 : client.off('tokenExpired', handleExpiredToken);
+        client == null ? void 0 : client.off("messageAdded", messageAdded);
+        client == null ? void 0 : client.off("conversationAdded", loadConversation);
+        client == null ? void 0 : client.off("tokenAboutToExpire", handleExpiredToken);
+        client == null ? void 0 : client.off("tokenExpired", handleExpiredToken);
       };
     }
 
@@ -1718,15 +1718,15 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
         })
       });
 
-      if (newMessage.hasOwnProperty('text')) {
+      if (newMessage.hasOwnProperty("text")) {
         selectedConversation.sendMessage(newMessage.text);
-      } else if (newMessage.hasOwnProperty('image')) {
+      } else if (newMessage.hasOwnProperty("image")) {
         var formData = new FormData();
-        formData.append('file', {
+        formData.append("file", {
           //@ts-expect-error
           uri: newMessage.image,
-          type: 'image/jpeg',
-          name: 'image.jpg'
+          type: "image/jpeg",
+          name: "image.jpg"
         });
         selectedConversation.sendMessage(formData);
       }

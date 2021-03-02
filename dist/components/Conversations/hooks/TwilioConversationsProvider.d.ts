@@ -1,6 +1,6 @@
-import React from 'react';
-import { IMessage } from 'react-native-gifted-chat';
-import { IConversation } from '../types';
+import React from "react";
+import { IMessage } from "react-native-gifted-chat";
+import { IConversation } from "../types";
 export declare type TwilioConversationsContextType = {
     availableConversations: IConversation[] | [];
     conversationsLoaded: boolean;

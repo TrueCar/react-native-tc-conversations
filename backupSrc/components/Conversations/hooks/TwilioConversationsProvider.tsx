@@ -1,16 +1,16 @@
-import React from "react";
-import axios from "axios";
-import { Client as ConversationsClient } from "@twilio/conversations";
-import { Client } from "@twilio/conversations/lib/client";
-import { IMessage } from "react-native-gifted-chat";
-import { Message } from "@twilio/conversations/lib/message";
+import React from 'react';
+import axios from 'axios';
+import { Client as ConversationsClient } from '@twilio/conversations';
+import { Client } from '@twilio/conversations/lib/client';
+import { IMessage } from 'react-native-gifted-chat';
+import { Message } from '@twilio/conversations/lib/message';
 
 import {
   formatMessageForGiftedChat,
   formatMessagesForGiftedChat,
-} from "../../../utils/messageUtils";
-import { IConversation } from "../types";
-import { createRequiredContext } from "./requiredContext";
+} from '../../../utils/messageUtils';
+import { IConversation } from '../types';
+import { createRequiredContext } from './requiredContext';
 
 export type TwilioConversationsContextType = {
   availableConversations: IConversation[] | [];
@@ -27,12 +27,9 @@ export type TwilioConversationsContextType = {
   updateConversation: (conversation: IConversation) => void;
 };
 
-const [
-  Provider,
-  useTwilioConversations,
-] = createRequiredContext<TwilioConversationsContextType>(
-  "TwilioConversations"
-);
+const [Provider, useTwilioConversations] = createRequiredContext<
+  TwilioConversationsContextType
+>('TwilioConversations');
 
 type Props = {
   children: React.ReactNode;
@@ -62,7 +59,7 @@ const TwilioConversationsProvider = ({
   ] = React.useState<IConversation | null>(null);
 
   const [client, setClient] = React.useState<Client | null>(null);
-  const [identity, setIdentity] = React.useState("");
+  const [identity, setIdentity] = React.useState('');
 
   const getTokenData = React.useCallback(async () => {
     const tokenResp = axios.get(tokenEndpoint);
@@ -82,7 +79,7 @@ const TwilioConversationsProvider = ({
       const messages = await conversation.getMessages();
       const displayableMessages = messages.items.filter(
         // @ts-expect-error
-        (m) => !m.attributes.to || m.attributes.to === identity
+        m => !m.attributes.to || m.attributes.to === identity
       );
 
       return formatMessagesForGiftedChat(displayableMessages, identity);
@@ -151,14 +148,14 @@ const TwilioConversationsProvider = ({
         if (lastMessage?.pending) {
           messages[0] = newMessage;
         } else {
-          messages = [...conversation.messages, newMessage];
+          messages = [newMessage, ...conversation.messages];
         }
         conversation.mostRecentMessage = messages[0].text;
         conversation.messages = messages;
         if (conversation.lastMessage) {
           conversation.lastMessage.dateCreated = new Date(newMessage.createdAt);
         }
-        if (!author.includes("dealership")) {
+        if (!author.includes('dealership')) {
           conversation.unreadMessagesCount =
             conversation.unreadMessagesCount + 1;
         } else {
@@ -250,7 +247,7 @@ const TwilioConversationsProvider = ({
       }
 
       let unreadMessagesUsersCount = 0;
-      const adaptedConversationPromises = aggConversations.map(async (c) => {
+      const adaptedConversationPromises = aggConversations.map(async c => {
         if ((await c.getUnreadMessagesCount()) && c.lastReadMessageIndex) {
           unreadMessagesUsersCount += 1;
         }
@@ -305,10 +302,10 @@ const TwilioConversationsProvider = ({
         initializeClient();
       } else if (tokenEndpoint !== currentTokenEndpoint) {
         // re-initialize when the dealer changes
-        client?.off("messageAdded", messageAdded);
-        client?.off("conversationAdded", loadConversation);
-        client?.off("tokenAboutToExpire", handleExpiredToken);
-        client?.off("tokenExpired", handleExpiredToken);
+        client?.off('messageAdded', messageAdded);
+        client?.off('conversationAdded', loadConversation);
+        client?.off('tokenAboutToExpire', handleExpiredToken);
+        client?.off('tokenExpired', handleExpiredToken);
         setConversationsLoaded(false);
         setConversations(new Map());
         setAvailableConversations([]);
@@ -333,18 +330,18 @@ const TwilioConversationsProvider = ({
       // Event handlers are cached with the state at the time they are added
       // so they need to be refresh when one of the state dependency changes,
       // ie. in this particular case, identity
-      client.on("conversationAdded", loadConversation);
-      client.on("messageAdded", messageAdded);
-      client.on("tokenAboutToExpire", handleExpiredToken);
-      client.on("tokenExpired", handleExpiredToken);
+      client.on('conversationAdded', loadConversation);
+      client.on('messageAdded', messageAdded);
+      client.on('tokenAboutToExpire', handleExpiredToken);
+      client.on('tokenExpired', handleExpiredToken);
       return () => {
         // Note that this function will fire if this useEffect gets triggered, despite
         // whether it passes the if-statement check.
         // In this case, we want to remove the listeners when identity or client changes.
-        client?.off("messageAdded", messageAdded);
-        client?.off("conversationAdded", loadConversation);
-        client?.off("tokenAboutToExpire", handleExpiredToken);
-        client?.off("tokenExpired", handleExpiredToken);
+        client?.off('messageAdded', messageAdded);
+        client?.off('conversationAdded', loadConversation);
+        client?.off('tokenAboutToExpire', handleExpiredToken);
+        client?.off('tokenExpired', handleExpiredToken);
       };
     }
     return undefined;
@@ -368,15 +365,15 @@ const TwilioConversationsProvider = ({
           newMessage: { ...newMessage, user: { _id: identity }, pending: true },
         });
 
-        if (newMessage.hasOwnProperty("text")) {
+        if (newMessage.hasOwnProperty('text')) {
           selectedConversation.sendMessage(newMessage.text);
-        } else if (newMessage.hasOwnProperty("image")) {
+        } else if (newMessage.hasOwnProperty('image')) {
           const formData = new FormData();
-          formData.append("file", {
+          formData.append('file', {
             //@ts-expect-error
             uri: newMessage.image,
-            type: "image/jpeg",
-            name: "image.jpg",
+            type: 'image/jpeg',
+            name: 'image.jpg',
           });
           selectedConversation.sendMessage(formData);
         }
