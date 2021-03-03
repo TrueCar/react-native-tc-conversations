@@ -891,7 +891,7 @@ var getProspectIdFromConversation = function getProspectIdFromConversation(conve
 };
 var formatMessageForGiftedChat = /*#__PURE__*/function () {
   var _ref = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee(message, identity) {
-    var _message$author, _message$conversation;
+    var _message$author, _message$conversation, _message$attributes;
 
     var isConsumerMessage, name, id, formattedMessage;
     return runtime_1.wrap(function _callee$(_context) {
@@ -906,6 +906,8 @@ var formatMessageForGiftedChat = /*#__PURE__*/function () {
               _id: message.sid,
               text: message.body,
               createdAt: message.dateCreated,
+              //@ts-expect-error
+              clientMessageId: (_message$attributes = message.attributes) == null ? void 0 : _message$attributes.clientMessageId,
               // system: m.author === "system",
               user: {
                 _id: id,
@@ -1238,11 +1240,14 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
         return curr;
       }
 
-      var messages = conversation.messages;
-      var lastMessage = messages[0];
+      var messages = conversation.messages; //@ts-expect-error
 
-      if (lastMessage != null && lastMessage.pending) {
-        messages[0] = newMessage;
+      if (newMessage != null && newMessage.clientMessageId) {
+        messages = messages.map(function (msg) {
+          return (//@ts-expect-error
+            msg._id === (newMessage == null ? void 0 : newMessage.clientMessageId) ? newMessage : msg
+          );
+        });
       } else {
         messages = [].concat(conversation.messages, [newMessage]);
       }
@@ -1629,13 +1634,15 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
         newMessage: _extends({}, newMessage, {
           user: {
             _id: identity
-          },
-          pending: true
+          }
         })
       });
+      var msgAttributes = {
+        clientMessageId: newMessage._id
+      };
 
       if (newMessage.hasOwnProperty("text")) {
-        selectedConversation.sendMessage(newMessage.text);
+        selectedConversation.sendMessage(newMessage.text, msgAttributes);
       } else if (newMessage.hasOwnProperty("image")) {
         var formData = new FormData();
         formData.append("file", {
@@ -1644,7 +1651,7 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
           type: "image/jpeg",
           name: "image.jpg"
         });
-        selectedConversation.sendMessage(formData);
+        selectedConversation.sendMessage(formData, msgAttributes);
       }
 
       selectedConversation.setAllMessagesRead();
@@ -1902,7 +1909,6 @@ var Conversation = function Conversation(_ref2) {
     webMode: true
   }, rest))));
 };
-
 var styles = /*#__PURE__*/StyleSheet.create({
   loading: {
     flex: 1
@@ -1938,4 +1944,5 @@ var styles = /*#__PURE__*/StyleSheet.create({
 });
 
 export default Conversation;
+export { Conversation };
 //# sourceMappingURL=react-native-tc-conversations.esm.js.map

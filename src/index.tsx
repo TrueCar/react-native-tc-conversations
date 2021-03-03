@@ -278,7 +278,7 @@ const ConversationWithoutProvider = ({
   );
 };
 
-const Conversation = ({
+export const Conversation = ({
   tokenEndpoint,
   prospectId,
   ...rest

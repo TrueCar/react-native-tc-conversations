@@ -27,7 +27,8 @@ export const formatMessageForGiftedChat: (
     _id: message.sid,
     text: message.body,
     createdAt: message.dateCreated,
-
+    //@ts-expect-error
+    clientMessageId: message.attributes?.clientMessageId,
     // system: m.author === "system",
     user: {
       _id: id,

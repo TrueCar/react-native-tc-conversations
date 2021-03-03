@@ -23,5 +23,5 @@ export declare type ProspectInfo = {
     id: string;
     name: string;
 };
-declare const Conversation: ({ tokenEndpoint, prospectId, ...rest }: ConversationProps) => JSX.Element;
+export declare const Conversation: ({ tokenEndpoint, prospectId, ...rest }: ConversationProps) => JSX.Element;
 export default Conversation;

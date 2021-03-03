@@ -147,9 +147,12 @@ const TwilioConversationsProvider = ({
           return curr;
         }
         let messages = conversation.messages;
-        const lastMessage = messages[0];
-        if (lastMessage?.pending) {
-          messages[0] = newMessage;
+        //@ts-expect-error
+        if (newMessage?.clientMessageId) {
+          messages = messages.map((msg) =>
+            //@ts-expect-error
+            msg._id === newMessage?.clientMessageId ? newMessage : msg
+          );
         } else {
           messages = [...conversation.messages, newMessage];
         }
@@ -365,11 +368,13 @@ const TwilioConversationsProvider = ({
         renderNewMessage({
           author: identity,
           conversationId: selectedConversation.sid,
-          newMessage: { ...newMessage, user: { _id: identity }, pending: true },
+          newMessage: { ...newMessage, user: { _id: identity } },
         });
-
+        const msgAttributes = {
+          clientMessageId: newMessage._id,
+        };
         if (newMessage.hasOwnProperty("text")) {
-          selectedConversation.sendMessage(newMessage.text);
+          selectedConversation.sendMessage(newMessage.text, msgAttributes);
         } else if (newMessage.hasOwnProperty("image")) {
           const formData = new FormData();
           formData.append("file", {
@@ -378,7 +383,7 @@ const TwilioConversationsProvider = ({
             type: "image/jpeg",
             name: "image.jpg",
           });
-          selectedConversation.sendMessage(formData);
+          selectedConversation.sendMessage(formData, msgAttributes);
         }
 
         selectedConversation.setAllMessagesRead();
