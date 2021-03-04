@@ -1215,13 +1215,12 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
               break;
 
             case 15:
-              console.log("loaded earlier messages???", aggMessages.length);
               conversation.messagePaginator = messagePaginator;
               conversation.messages = aggMessages;
               setSelectedConversation(conversation);
               updateConversation(conversation);
 
-            case 20:
+            case 19:
             case "end":
               return _context4.stop();
           }
@@ -1916,52 +1915,6 @@ var ConversationWithoutProvider = function ConversationWithoutProvider(_ref) {
       containerStyle: styles.sendContainer
     }), SendButton);
   };
-
-  console.log("how many times are we rendering??"); // const ref = useRef(null);
-  // //@ts-expect-error
-  // const flatListRef = ref?.current?._messageContainerRef;
-  // const invertedWheelEvent = useCallback(
-  //   (e) => {
-  //     const currentRef = flatListRef?.current;
-  //     if (currentRef) {
-  //       currentRef.getScrollableNode().scrollTop -= e.deltaY;
-  //       console.log(
-  //         "scroll info",
-  //         e.deltaMode,
-  //         e.deltaY,
-  //         e.wheelDeltaY,
-  //         currentRef.getScrollableNode().scrollTop
-  //       );
-  //       e.preventDefault();
-  //     }
-  //   },
-  //   [flatListRef]
-  // );
-  // useEffect(() => {
-  //   const currentRef = flatListRef?.current;
-  //   console.log({ currentRef, current: currentRef?.current });
-  //   if (currentRef?.current) {
-  //     console.log("MAKING IT INSIDE THE IF STATEMENT");
-  //     currentRef
-  //       .getScrollableNode()
-  //       .addEventListener("wheel", invertedWheelEvent);
-  //     // enable hardware acceleration
-  //     // makes scrolling fast in safari and firefox
-  //     // https://stackoverflow.com/a/24157294
-  //     currentRef.setNativeProps({
-  //       style: {
-  //         transform: "translate3d(0,0,0) scaleY(-1)",
-  //       },
-  //     });
-  //   }
-  //   return () => {
-  //     if (currentRef) {
-  //       currentRef
-  //         .getScrollableNode()
-  //         .removeEventListener("wheel", invertedWheelEvent);
-  //     }
-  //   };
-  // }, [invertedWheelEvent, flatListRef]);
 
   return React__default.createElement(reactNative.View, {
     style: styles.container,

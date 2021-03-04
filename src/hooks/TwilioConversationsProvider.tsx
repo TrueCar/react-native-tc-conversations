@@ -125,7 +125,6 @@ const TwilioConversationsProvider = ({
           await formatMessagesForGiftedChat(messagePaginator.items, identity)
         );
       }
-      console.log("loaded earlier messages???", aggMessages.length);
       conversation.messagePaginator = messagePaginator;
       conversation.messages = aggMessages;
       setSelectedConversation(conversation);
