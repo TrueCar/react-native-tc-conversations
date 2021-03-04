@@ -14,7 +14,7 @@ import {
   SendProps,
   SystemMessage,
   SystemMessageProps,
-} from "react-native-gifted-chat";
+} from "react-web-gifted-chat";
 
 import Feather from "react-native-vector-icons/Feather";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -30,7 +30,6 @@ import {
 } from "../../constants/style";
 import CustomActions from "./components/CustomActions";
 import IconToBottom from "./components/icons/IconToBottom";
-import NavBar from "./components/NavBar";
 import { useTwilioConversations } from "./hooks/TwilioConversationsProvider";
 
 export type ConversationProps = {
@@ -233,30 +232,10 @@ const Conversation = ({
 
   return (
     <View style={styles.container} accessibilityLabel="main" testID="main">
-      {!webMode && (
-        <NavBar
-        // title={selectedConversation?.title || ""}
-        // onPressLeft={async () => {
-        //   onNavBarPressLeft?.();
-        //   handleBackPress();
-        // }}
-        // onPressRight={() => {
-        //   onNavBarPressRight?.();
-        // }}
-        // onPressTitle={() => {
-        //   onNavBarPressTitle?.();
-        // }}
-        />
-      )}
-
       <GiftedChat
         text={conversationInputText}
         onInputTextChanged={setConversationInputText}
-        messages={
-          Platform.OS !== "web"
-            ? selectedConversation?.messages.reverse()
-            : selectedConversation?.messages
-        }
+        messages={selectedConversation?.messages}
         onSend={onMessageSend}
         user={{ _id: identity, name: identity }}
         scrollToBottom
@@ -271,10 +250,8 @@ const Conversation = ({
         renderInputToolbar={hasOptedOut ? () => null : renderCustomInputToolbar}
         renderComposer={renderCustomComposer}
         renderUsernameOnMessage={renderUsernameOnMessage}
-        //@ts-expect-error
-        renderTicks={() => null}
         quickReplyStyle={{ borderRadius: 2 }}
-        inverted={Platform.OS !== "web"}
+        inverted={false}
         bottomOffset={bottomOffset}
         timeTextStyle={{
           left: { color: "red" },
@@ -282,6 +259,7 @@ const Conversation = ({
         }}
         listViewProps={{ style: { marginBottom: 10 } }}
         infiniteScroll
+        //@ts-expect-error
         textProps={{ style: { fontFamily: webMode ? tcFontWeb : tcFont } }}
       />
       {hasOptedOut && (

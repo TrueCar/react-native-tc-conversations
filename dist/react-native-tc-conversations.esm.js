@@ -1112,7 +1112,7 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
   })), [client, getTokenData]);
   var getMessages = React__default.useCallback( /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee3(conversation) {
-      var messages, displayableMessages;
+      var messagePaginator, displayableMessages;
       return runtime_1.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -1122,21 +1122,33 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
                 break;
               }
 
-              return _context3.abrupt("return", []);
+              return _context3.abrupt("return", {
+                messagePaginator: null,
+                messages: []
+              });
 
             case 2:
               _context3.next = 4;
               return conversation.getMessages();
 
             case 4:
-              messages = _context3.sent;
-              displayableMessages = messages.items.filter( // @ts-expect-error
+              messagePaginator = _context3.sent;
+              displayableMessages = messagePaginator.items.filter( // @ts-expect-error
               function (m) {
                 return !m.attributes.to || m.attributes.to === identity;
               });
-              return _context3.abrupt("return", formatMessagesForGiftedChat(displayableMessages, identity));
+              _context3.t0 = messagePaginator;
+              _context3.next = 9;
+              return formatMessagesForGiftedChat(displayableMessages, identity);
 
-            case 7:
+            case 9:
+              _context3.t1 = _context3.sent;
+              return _context3.abrupt("return", {
+                messagePaginator: _context3.t0,
+                messages: _context3.t1
+              });
+
+            case 11:
             case "end":
               return _context3.stop();
           }
@@ -1148,11 +1160,44 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
       return _ref4.apply(this, arguments);
     };
   }(), [identity]);
+  var updateConversation = React__default.useCallback(function (newConversation) {
+    return setConversations(function (curr) {
+      return new Map(curr.set(newConversation.sid, newConversation));
+    });
+  }, []); // const loadEarlierMessages = React.useCallback(
+  //   async (conversation: IConversation | null) => {
+  //     if (!conversation || !conversation.messagePaginator?.hasPrevPage) {
+  //       return;
+  //     }
+  //     let messagePaginator = conversation.messagePaginator;
+  //     const aggMessages = [...conversation.messages];
+  //     while (messagePaginator.hasPrevPage) {
+  //       // eslint-disable-next-line
+  //       messagePaginator = await messagePaginator.prevPage();
+  //       aggMessages.unshift(
+  //         // eslint-disable-next-line
+  //         ...(await formatMessagesForGiftedChat(
+  //           messagePaginator.items,
+  //           identity
+  //         ))
+  //       );
+  //     }
+  //     console.log("loaded earlier messages???", aggMessages.length);
+  //     console.log("loaded earlier messages???", aggMessages);
+  //     conversation.messagePaginator = messagePaginator;
+  //     conversation.messages = aggMessages;
+  //     setSelectedConversation(conversation);
+  //     updateConversation(conversation);
+  //   },
+  //   [identity, updateConversation]
+  // );
+
   var mapTwilioConversationToCommsConversation = React__default.useCallback( /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee4(conversation) {
       var _conversation$attribu, _messages$;
 
-      var title, messages;
+      var title, _yield$getMessages, messagePaginator, messages;
+
       return runtime_1.wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
@@ -1164,27 +1209,30 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
               return getMessages(conversation);
 
             case 5:
-              messages = _context4.sent;
+              _yield$getMessages = _context4.sent;
+              messagePaginator = _yield$getMessages.messagePaginator;
+              messages = _yield$getMessages.messages;
+              conversation.messagePaginator = messagePaginator;
               conversation.messages = messages;
               conversation.mostRecentMessage = (_messages$ = messages[0]) == null ? void 0 : _messages$.text;
-              _context4.next = 10;
+              _context4.next = 13;
               return conversation.getUnreadMessagesCount();
 
-            case 10:
+            case 13:
               _context4.t0 = _context4.sent;
 
               if (_context4.t0) {
-                _context4.next = 13;
+                _context4.next = 16;
                 break;
               }
 
               _context4.t0 = 0;
 
-            case 13:
+            case 16:
               conversation.unreadMessagesCount = _context4.t0;
               return _context4.abrupt("return", conversation);
 
-            case 15:
+            case 18:
             case "end":
               return _context4.stop();
           }
@@ -1224,11 +1272,6 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
       return _ref6.apply(this, arguments);
     };
   }(), [mapTwilioConversationToCommsConversation]);
-  var updateConversation = React__default.useCallback(function (newConversation) {
-    return setConversations(function (curr) {
-      return new Map(curr.set(newConversation.sid, newConversation));
-    });
-  }, []);
   var renderNewMessage = React__default.useCallback(function (_ref7) {
     var author = _ref7.author,
         conversationId = _ref7.conversationId,
@@ -1526,14 +1569,16 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
               conversationsResult = _context11.t0;
               setUnreadUsers(conversationsResult.unreadUsers);
               setAvailableConversations(conversationsResult.availableConversations);
+              console.log("hitting this point??");
 
               if (conversationsResult.selectedConversation) {
                 setSelectedConversation(conversationsResult.selectedConversation);
+                console.log("calling load earlier messages?"); // loadEarlierMessages(conversationsResult.selectedConversation);
               }
 
               setConversationsLoaded(true);
 
-            case 14:
+            case 15:
             case "end":
               return _context11.stop();
           }
@@ -1544,7 +1589,8 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
     return function (_x9) {
       return _ref14.apply(this, arguments);
     };
-  }(), [prospectId, loadUniqueConversation, loadMultipleConversations]);
+  }(), [prospectId, // loadEarlierMessages,
+  loadUniqueConversation, loadMultipleConversations]);
   var initializeClient = React__default.useCallback( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee12() {
     var tokenResp, identity, token, twilioClient;
     return runtime_1.wrap(function _callee12$(_context12) {

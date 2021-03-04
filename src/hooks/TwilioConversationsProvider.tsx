@@ -4,7 +4,7 @@ import { Client as ConversationsClient } from "@twilio/conversations";
 import { Client } from "@twilio/conversations/lib/client";
 import { IMessage } from "react-native-gifted-chat";
 import { Message } from "@twilio/conversations/lib/message";
-
+import { Paginator } from "@twilio/conversations/lib/interfaces/paginator";
 import {
   formatMessageForGiftedChat,
   formatMessagesForGiftedChat,
@@ -75,20 +75,68 @@ const TwilioConversationsProvider = ({
   }, [client, getTokenData]);
 
   const getMessages = React.useCallback(
-    async (conversation: IConversation | null) => {
+    async (
+      conversation: IConversation | null
+    ): Promise<{
+      messagePaginator: Paginator<Message> | null;
+      messages: IMessage[];
+    }> => {
       if (!conversation) {
-        return [];
+        return { messagePaginator: null, messages: [] };
       }
-      const messages = await conversation.getMessages();
-      const displayableMessages = messages.items.filter(
+      const messagePaginator = await conversation.getMessages();
+      const displayableMessages = messagePaginator.items.filter(
         // @ts-expect-error
         (m) => !m.attributes.to || m.attributes.to === identity
       );
 
-      return formatMessagesForGiftedChat(displayableMessages, identity);
+      return {
+        messagePaginator,
+        messages: await formatMessagesForGiftedChat(
+          displayableMessages,
+          identity
+        ),
+      };
     },
     [identity]
   );
+
+  const updateConversation = React.useCallback(
+    (newConversation: IConversation) =>
+      setConversations(
+        (curr: Map<string, IConversation>) =>
+          new Map(curr.set(newConversation.sid, newConversation))
+      ),
+    []
+  );
+
+  // const loadEarlierMessages = React.useCallback(
+  //   async (conversation: IConversation | null) => {
+  //     if (!conversation || !conversation.messagePaginator?.hasPrevPage) {
+  //       return;
+  //     }
+  //     let messagePaginator = conversation.messagePaginator;
+  //     const aggMessages = [...conversation.messages];
+  //     while (messagePaginator.hasPrevPage) {
+  //       // eslint-disable-next-line
+  //       messagePaginator = await messagePaginator.prevPage();
+  //       aggMessages.unshift(
+  //         // eslint-disable-next-line
+  //         ...(await formatMessagesForGiftedChat(
+  //           messagePaginator.items,
+  //           identity
+  //         ))
+  //       );
+  //     }
+  //     console.log("loaded earlier messages???", aggMessages.length);
+  //     console.log("loaded earlier messages???", aggMessages);
+  //     conversation.messagePaginator = messagePaginator;
+  //     conversation.messages = aggMessages;
+  //     setSelectedConversation(conversation);
+  //     updateConversation(conversation);
+  //   },
+  //   [identity, updateConversation]
+  // );
 
   const mapTwilioConversationToCommsConversation = React.useCallback(
     async (conversation: IConversation) => {
@@ -98,7 +146,8 @@ const TwilioConversationsProvider = ({
         conversation?.uniqueName;
       conversation.title = title;
       conversation.id = conversation.sid;
-      const messages = await getMessages(conversation);
+      const { messagePaginator, messages } = await getMessages(conversation);
+      conversation.messagePaginator = messagePaginator;
       conversation.messages = messages;
       conversation.mostRecentMessage = messages[0]?.text;
       conversation.unreadMessagesCount =
@@ -120,15 +169,6 @@ const TwilioConversationsProvider = ({
       );
     },
     [mapTwilioConversationToCommsConversation]
-  );
-
-  const updateConversation = React.useCallback(
-    (newConversation: IConversation) =>
-      setConversations(
-        (curr: Map<string, IConversation>) =>
-          new Map(curr.set(newConversation.sid, newConversation))
-      ),
-    []
   );
 
   const renderNewMessage = React.useCallback(
@@ -285,12 +325,20 @@ const TwilioConversationsProvider = ({
 
       setUnreadUsers(conversationsResult.unreadUsers);
       setAvailableConversations(conversationsResult.availableConversations);
+      console.log("hitting this point??");
       if (conversationsResult.selectedConversation) {
         setSelectedConversation(conversationsResult.selectedConversation);
+        console.log("calling load earlier messages?");
+        // loadEarlierMessages(conversationsResult.selectedConversation);
       }
       setConversationsLoaded(true);
     },
-    [prospectId, loadUniqueConversation, loadMultipleConversations]
+    [
+      prospectId,
+      // loadEarlierMessages,
+      loadUniqueConversation,
+      loadMultipleConversations,
+    ]
   );
 
   const initializeClient = React.useCallback(async () => {
