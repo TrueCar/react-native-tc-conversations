@@ -110,33 +110,29 @@ const TwilioConversationsProvider = ({
     []
   );
 
-  // const loadEarlierMessages = React.useCallback(
-  //   async (conversation: IConversation | null) => {
-  //     if (!conversation || !conversation.messagePaginator?.hasPrevPage) {
-  //       return;
-  //     }
-  //     let messagePaginator = conversation.messagePaginator;
-  //     const aggMessages = [...conversation.messages];
-  //     while (messagePaginator.hasPrevPage) {
-  //       // eslint-disable-next-line
-  //       messagePaginator = await messagePaginator.prevPage();
-  //       aggMessages.unshift(
-  //         // eslint-disable-next-line
-  //         ...(await formatMessagesForGiftedChat(
-  //           messagePaginator.items,
-  //           identity
-  //         ))
-  //       );
-  //     }
-  //     console.log("loaded earlier messages???", aggMessages.length);
-  //     console.log("loaded earlier messages???", aggMessages);
-  //     conversation.messagePaginator = messagePaginator;
-  //     conversation.messages = aggMessages;
-  //     setSelectedConversation(conversation);
-  //     updateConversation(conversation);
-  //   },
-  //   [identity, updateConversation]
-  // );
+  const loadEarlierMessages = React.useCallback(
+    async (conversation: IConversation | null) => {
+      if (!conversation || !conversation.messagePaginator?.hasPrevPage) {
+        return;
+      }
+      let messagePaginator = conversation.messagePaginator;
+      let aggMessages = [...conversation.messages];
+      while (messagePaginator.hasPrevPage) {
+        // eslint-disable-next-line
+        messagePaginator = await messagePaginator.prevPage();
+        aggMessages = aggMessages.concat(
+          // eslint-disable-next-line
+          await formatMessagesForGiftedChat(messagePaginator.items, identity)
+        );
+      }
+      console.log("loaded earlier messages???", aggMessages.length);
+      conversation.messagePaginator = messagePaginator;
+      conversation.messages = aggMessages;
+      setSelectedConversation(conversation);
+      updateConversation(conversation);
+    },
+    [identity, updateConversation]
+  );
 
   const mapTwilioConversationToCommsConversation = React.useCallback(
     async (conversation: IConversation) => {
@@ -324,18 +320,20 @@ const TwilioConversationsProvider = ({
         : await loadMultipleConversations(client);
 
       setUnreadUsers(conversationsResult.unreadUsers);
-      setAvailableConversations(conversationsResult.availableConversations);
-      console.log("hitting this point??");
       if (conversationsResult.selectedConversation) {
         setSelectedConversation(conversationsResult.selectedConversation);
-        console.log("calling load earlier messages?");
-        // loadEarlierMessages(conversationsResult.selectedConversation);
+        setTimeout(
+          () => loadEarlierMessages(conversationsResult.selectedConversation),
+          1
+        );
+      } else if (conversationsResult.availableConversations) {
+        setAvailableConversations(conversationsResult.availableConversations);
       }
       setConversationsLoaded(true);
     },
     [
       prospectId,
-      // loadEarlierMessages,
+      loadEarlierMessages,
       loadUniqueConversation,
       loadMultipleConversations,
     ]

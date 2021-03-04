@@ -219,16 +219,63 @@ const ConversationWithoutProvider = ({
     );
   };
 
+  // const ref = useRef(null);
+  // //@ts-expect-error
+  // const flatListRef = ref?.current?._messageContainerRef;
+
+  // const invertedWheelEvent = useCallback(
+  //   (e) => {
+  //     const currentRef = flatListRef?.current;
+  //     if (currentRef) {
+  //       currentRef.getScrollableNode().scrollTop -= e.deltaY;
+  //       console.log(
+  //         "scroll info",
+  //         e.deltaMode,
+  //         e.deltaY,
+  //         e.wheelDeltaY,
+  //         currentRef.getScrollableNode().scrollTop
+  //       );
+  //       e.preventDefault();
+  //     }
+  //   },
+  //   [flatListRef]
+  // );
+
+  // useEffect(() => {
+  //   const currentRef = flatListRef?.current;
+  //   console.log({ currentRef, current: currentRef?.current });
+  //   if (currentRef?.current) {
+  //     console.log("MAKING IT INSIDE THE IF STATEMENT");
+  //     currentRef
+  //       .getScrollableNode()
+  //       .addEventListener("wheel", invertedWheelEvent);
+
+  //     // enable hardware acceleration
+  //     // makes scrolling fast in safari and firefox
+  //     // https://stackoverflow.com/a/24157294
+  //     currentRef.setNativeProps({
+  //       style: {
+  //         transform: "translate3d(0,0,0) scaleY(-1)",
+  //       },
+  //     });
+  //   }
+
+  //   return () => {
+  //     if (currentRef) {
+  //       currentRef
+  //         .getScrollableNode()
+  //         .removeEventListener("wheel", invertedWheelEvent);
+  //     }
+  //   };
+  // }, [invertedWheelEvent, flatListRef]);
+
   return (
     <View style={styles.container} accessibilityLabel="main" testID="main">
       <GiftedChat
+        // ref={ref}
         text={conversationInputText}
         onInputTextChanged={setConversationInputText}
-        messages={
-          Platform.OS !== "web"
-            ? selectedConversation?.messages.reverse()
-            : selectedConversation?.messages
-        }
+        messages={selectedConversation?.messages}
         onSend={onMessageSend}
         user={{ _id: identity, name: identity }}
         scrollToBottom
@@ -242,10 +289,8 @@ const ConversationWithoutProvider = ({
         renderInputToolbar={hasOptedOut ? () => null : renderCustomInputToolbar}
         renderComposer={renderCustomComposer}
         renderUsernameOnMessage={renderUsernameOnMessage}
-        //@ts-expect-error
-        renderTicks={() => null}
         quickReplyStyle={{ borderRadius: 2 }}
-        inverted={Platform.OS !== "web"}
+        inverted
         bottomOffset={bottomOffset}
         timeTextStyle={{
           left: { color: "red" },
@@ -253,6 +298,7 @@ const ConversationWithoutProvider = ({
         }}
         listViewProps={{ style: { marginBottom: 10 } }}
         infiniteScroll
+        //@ts-expect-error
         textProps={{ style: { fontFamily: webMode ? tcFontWeb : tcFont } }}
       />
       {hasOptedOut && (
