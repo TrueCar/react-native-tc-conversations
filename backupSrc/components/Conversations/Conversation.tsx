@@ -14,7 +14,7 @@ import {
   SendProps,
   SystemMessage,
   SystemMessageProps,
-} from "react-web-gifted-chat";
+} from "react-native-gifted-chat";
 
 import Feather from "react-native-vector-icons/Feather";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
