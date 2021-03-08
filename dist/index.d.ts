@@ -1,4 +1,5 @@
 import React from "react";
+import useCopyMessages from "./hooks/useCopyMessages";
 export declare type ConversationWithoutProviderProps = {
     bottomOffset?: number;
     manualOfferBtnComponent?: (prospect: ProspectInfo) => React.ReactNode;
@@ -23,5 +24,5 @@ export declare type ProspectInfo = {
     id: string;
     name: string;
 };
-export declare const Conversation: ({ tokenEndpoint, prospectId, ...rest }: ConversationProps) => JSX.Element;
-export default Conversation;
+declare const Conversation: ({ tokenEndpoint, prospectId, ...rest }: ConversationProps) => JSX.Element;
+export { Conversation, useCopyMessages };

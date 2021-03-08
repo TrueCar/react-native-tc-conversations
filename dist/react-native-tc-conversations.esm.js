@@ -7,6 +7,7 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 import Svg, { G, Path } from 'react-native-svg';
 import axios from 'axios';
 import { Client } from '@twilio/conversations';
+import Clipboard from '@react-native-community/clipboard';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
@@ -1754,6 +1755,17 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
   }, children);
 };
 
+var useCopyMessages = function useCopyMessages() {
+  var copyMessages = React__default.useCallback(function (messages) {
+    var output = "";
+    messages.forEach(function (msg) {
+      output += msg.user.name + " [" + msg.createdAt + "] \n " + msg.text + " \n";
+    });
+    Clipboard.setString(output);
+  }, []);
+  return copyMessages;
+};
+
 var ConversationWithoutProvider = function ConversationWithoutProvider(_ref) {
   var _ref$bottomOffset = _ref.bottomOffset,
       bottomOffset = _ref$bottomOffset === void 0 ? 0 : _ref$bottomOffset,
@@ -1987,6 +1999,7 @@ var Conversation = function Conversation(_ref2) {
     webMode: true
   }, rest))));
 };
+
 var styles = /*#__PURE__*/StyleSheet.create({
   loading: {
     flex: 1
@@ -2021,6 +2034,5 @@ var styles = /*#__PURE__*/StyleSheet.create({
   }
 });
 
-export default Conversation;
-export { Conversation };
+export { Conversation, useCopyMessages };
 //# sourceMappingURL=react-native-tc-conversations.esm.js.map

@@ -15,6 +15,7 @@ var Svg = require('react-native-svg');
 var Svg__default = _interopDefault(Svg);
 var axios = _interopDefault(require('axios'));
 var conversations = require('@twilio/conversations');
+var Clipboard = _interopDefault(require('@react-native-community/clipboard'));
 var reactNativeSafeAreaContext = require('react-native-safe-area-context');
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
@@ -1762,6 +1763,17 @@ var TwilioConversationsProvider = function TwilioConversationsProvider(_ref) {
   }, children);
 };
 
+var useCopyMessages = function useCopyMessages() {
+  var copyMessages = React__default.useCallback(function (messages) {
+    var output = "";
+    messages.forEach(function (msg) {
+      output += msg.user.name + " [" + msg.createdAt + "] \n " + msg.text + " \n";
+    });
+    Clipboard.setString(output);
+  }, []);
+  return copyMessages;
+};
+
 var ConversationWithoutProvider = function ConversationWithoutProvider(_ref) {
   var _ref$bottomOffset = _ref.bottomOffset,
       bottomOffset = _ref$bottomOffset === void 0 ? 0 : _ref$bottomOffset,
@@ -1995,6 +2007,7 @@ var Conversation = function Conversation(_ref2) {
     webMode: true
   }, rest))));
 };
+
 var styles = /*#__PURE__*/reactNative.StyleSheet.create({
   loading: {
     flex: 1
@@ -2030,5 +2043,5 @@ var styles = /*#__PURE__*/reactNative.StyleSheet.create({
 });
 
 exports.Conversation = Conversation;
-exports.default = Conversation;
+exports.useCopyMessages = useCopyMessages;
 //# sourceMappingURL=react-native-tc-conversations.cjs.development.js.map

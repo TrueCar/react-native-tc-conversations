@@ -101,7 +101,9 @@ const Conversation = ({
   }, [selectedConversation, setSelectedConversation, updateConversation]);
 
   React.useEffect(() => {
-    if (webMode) return;
+    if (webMode) {
+      return;
+    }
 
     const handleHardwareBackPress = () => {
       if (selectedConversation) {
@@ -132,7 +134,9 @@ const Conversation = ({
   const renderCustomActions = (props: ActionsProps) => {
     // Note: this check is different from Platform.OS === web (for cypress)
     // vs webMode
-    if (webMode) return null;
+    if (webMode) {
+      return null;
+    }
 
     return (
       <CustomActions

@@ -32,6 +32,7 @@ import {
   TwilioConversationsProvider,
   useTwilioConversations,
 } from "./hooks/TwilioConversationsProvider";
+import useCopyMessages from "./hooks/useCopyMessages";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export type ConversationWithoutProviderProps = {
@@ -274,7 +275,7 @@ const ConversationWithoutProvider = ({
   );
 };
 
-export const Conversation = ({
+const Conversation = ({
   tokenEndpoint,
   prospectId,
   ...rest
@@ -324,4 +325,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Conversation;
+export { Conversation, useCopyMessages };
