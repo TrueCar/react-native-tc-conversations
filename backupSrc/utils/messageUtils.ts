@@ -1,4 +1,4 @@
-import { IConversation } from "./types";
+import { IConversation } from "../components/Conversations/types";
 import { Message } from "@twilio/conversations/lib/message";
 import { IMessage } from "react-native-gifted-chat";
 
@@ -27,8 +27,7 @@ export const formatMessageForGiftedChat: (
     _id: message.sid,
     text: message.body,
     createdAt: message.dateCreated,
-    //@ts-expect-error
-    clientMessageId: message.attributes?.clientMessageId,
+
     // system: m.author === "system",
     user: {
       _id: id,
@@ -50,7 +49,4 @@ export const formatMessageForGiftedChat: (
 export const formatMessagesForGiftedChat = async (
   messages: Message[],
   identity: string
-) =>
-  Promise.all(
-    messages.reverse().map((m) => formatMessageForGiftedChat(m, identity))
-  );
+) => Promise.all(messages.map((m) => formatMessageForGiftedChat(m, identity)));
